@@ -1,0 +1,10 @@
+require('./AppController');
+require('./AdminController');
+require('./AdminInitController');
+require('./AdminUserListController');
+require('./AdminFeedbackController');
+require('./StudentController');
+require('./StudentFeedbackMineController');
+require('./StudentFeedbackGiveController');
+require('./HomeController');
+require('./LoginController');

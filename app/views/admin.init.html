@@ -1,0 +1,12 @@
+<h2>初始化資料庫</h2>
+<form ng-submit="doInit()">
+	<p class="text-warning">警告：即將要把全部學生及評分資料刪除！</p>
+	<p>{{ message }}</p>
+	<div class="form-group">
+		<label for="group-num">組別數</label>
+		<input class="form-control" ng-model="groupNum" type="text" id="group-num" placeholder="請輸入組別數目.." style="max-width: 200px;">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">確定初始化</button>
+	</div>
+</form>

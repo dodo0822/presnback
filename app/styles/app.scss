@@ -1,0 +1,25 @@
+body {
+	padding-top: 70px;
+}
+
+.splash {
+	display: none;
+
+	&[ng-cloak] {
+		display: block;
+	}
+}
+
+.form-half {
+	div {
+		input {
+			max-width: 500px;
+		}
+	}
+}
+
+.ngdialog-large {
+	.ngdialog-content {
+		width: 650px !important;
+	}
+}

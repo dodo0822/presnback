@@ -1,0 +1,9 @@
+<h3>收到的評分</h3>
+<p ng-if="list.length == 0">還沒有收到任何評分。</p>
+<div ng-repeat="f in list">
+	<p><strong>於 {{ moment(f.time).calendar() }} 收到的評分：</strong></p>
+	<div>
+		<p>{{ f.content }}</p>
+	</div>
+	<hr>
+</div>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app="app">
+	<head>
+		<meta charset="utf-8">
+		<title>Presnback</title>
+	</head>
+	<body ng-controller="AppController">
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Presnback - Presentation Feedback</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a ng-if="isAuthenticated(1)" ui-sref="home">首頁</a></li>
+						<li><a ng-if="!isAuthenticated()" ui-sref="login">登入</a></li>
+						<li><a ng-if="isAuthenticated()" ng-click="logout()" href="javascript:void(0)">登出</a></li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</nav>
+
+		<div class="container" ui-view>
+
+			
+
+		</div><!-- /.container -->
+		<script src="bundle.js"></script>
+	</body>
+</html>

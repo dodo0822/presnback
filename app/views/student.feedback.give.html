@@ -1,0 +1,23 @@
+<form ng-submit="give()">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">你要給誰評分？</h3>
+				</div>
+				<ul class="list-group">
+					<li ng-class="to == $index ? 'list-group-item-info' : ''" class="list-group-item" ng-repeat="u in users"><a href="javascript:void(0)" ng-click="select($index)">第 {{ u.groupNum }} 組</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="form-group">
+				<p ng-if="to != -1"><strong>給第 {{ users[to].groupNum }} 組（{{ users[to].name }}）的評分</strong></p>
+				<label for="feedback-content">評分內容：</label>
+				<textarea rows="10" id="feedback-content" class="form-control" ng-model="content"></textarea>
+			</div>
+			<p>{{ message }}</p>
+			<button type="submit" class="btn btn-primary">確定送出</button>
+		</div>
+	</div>
+</form>

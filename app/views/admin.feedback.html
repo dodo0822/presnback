@@ -1,0 +1,13 @@
+<h3>管理評分內容</h3>
+<p><strong>篩選：由 <select ng-model="condFrom"><option value="-1">〈不指定〉</option><option ng-repeat="u in users" ng-value="$index">第 {{ u.groupNum }} 組</option></select> 給 <select ng-model="condTo"><option value="-1">〈不指定〉</option><option ng-repeat="u in users" ng-value="$index">第 {{ u.groupNum }} 組</option></select> <a class="btn btn-sm btn-primary" href="javascript:void(0)" ng-click="applyCondition()">套用條件</a></strong></p>
+<div ng-repeat="f in list">
+	<p><strong>第 {{ f.from.groupNum }} 組於 {{ moment(f.time).calendar() }} 傳送給第 {{ f.to.groupNum }} 組：</strong></p>
+	<p ng-if="editId != f._id">{{ f.content }}</p>
+	<div ng-if="editId == f._id">
+		<textarea ng-model="editContent" class="form-control"></textarea>
+		<br>
+		<button class="btn btn-primary" ng-click="doEdit(editContent)">確定編輯</button>&nbsp;<button class="btn btn-warning" ng-click="cancelEdit()">取消返回</button>
+	</div>
+	<p>[ <a href="javascript:void(0)" ng-click="remove($index)">刪除</a> | <a href="javascript:void(0)" ng-click="edit($index)">編輯</a> ]</p>
+	<hr>
+</div>
