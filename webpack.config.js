@@ -6,6 +6,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var APP = __dirname + '/app';
 
 var entry = {};
+var output = {};
 
 var plugins = [ new ProgressBarPlugin() ];
 
@@ -17,15 +18,20 @@ switch(process.env.NODE_ENV) {
 		plugins.push(new CopyWebpackPlugin([{
 			from: 'index.html',
 			to: '../build/'
-		}, {
-			from: 'bundle.js',
-			to: '../build/'
 		}]));
+		output = {
+			path: APP,
+			filename: '../build/bundle.js'
+		};
 		break;
 	case 'development':
 	default:
 		entry = {
 			app: [ 'babel-polyfill', 'webpack/hot/dev-server', './index.js' ]
+		};
+		output = {
+			path: APP,
+			filename: 'bundle.js'
 		};
 		plugins.push(new webpack.HotModuleReplacementPlugin());
 		break;
@@ -65,8 +71,5 @@ module.exports = {
 		]
 	},
 	plugins: plugins,
-	output: {
-		path: APP,
-		filename: 'bundle.js'
-	}
+	output: output
 };
