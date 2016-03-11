@@ -1,22 +1,20 @@
-<h2>輸入組別資料</h2>
+<h2>管理帳號資料</h2>
 <p>{{ message }}</p>
-<form ng-submit="submit()">
-	<button type="submit" class="btn btn-primary">確定送出</button>
-	<table class="table">
-		<thead>
-			<tr>
-				<th>組別</th>
-				<th>帳號</th>
-				<th>組員姓名</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="u in table">
-				<td>{{ u.groupNum }}</td>
-				<td>{{ u.username }}</td>
-				<td><input type="text" ng-model="table[$index].name"></td>
-			</tr>
-		</tbody>
-	</table>
-	<button type="submit" class="btn btn-primary">確定送出</button>
-</form>
+<table class="table">
+	<thead>
+		<tr>
+			<th>組別</th>
+			<th>帳號</th>
+			<th>姓名</th>
+			<th>動作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="u in table">
+			<td>{{ u.groupNum }}</td>
+			<td>{{ u.username }}</td>
+			<td>{{ u.name }}</td>
+			<td><a href="javascript:void(0)" ng-click="remove($index)">刪除</a></td>
+		</tr>
+	</tbody>
+</table>

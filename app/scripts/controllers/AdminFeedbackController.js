@@ -5,6 +5,7 @@ moment.locale('zh-tw');
 angular.module('app').controller('AdminFeedbackController', function(FeedbackService, UserService, $scope) {
 	$scope.list = [];
 	$scope.users = [];
+	$scope.groups = [];
 	$scope.moment = moment;
 	$scope.editId = -1;
 
@@ -16,10 +17,10 @@ angular.module('app').controller('AdminFeedbackController', function(FeedbackSer
 	$scope.applyCondition = function() {
 		$scope.condition = {};
 		if($scope.condFrom != -1) {
-			$scope.condition.from = $scope.users[$scope.condFrom]._id;
+			$scope.condition.from = $scope.groups[$scope.condFrom]._id;
 		}
 		if($scope.condTo != -1) {
-			$scope.condition.to = $scope.users[$scope.condTo]._id;
+			$scope.condition.to = $scope.groups[$scope.condTo]._id;
 		}
 		$scope.reload();
 	};
@@ -63,6 +64,11 @@ angular.module('app').controller('AdminFeedbackController', function(FeedbackSer
 	UserService.list().then(function(resp) {
 		$scope.users = resp.users;
 	});
+
+	UserService.listGroup().then(function(resp) {
+		$scope.groups = resp.groups;
+	});
+
 
 	$scope.reload();
 });

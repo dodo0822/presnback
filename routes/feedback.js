@@ -3,8 +3,8 @@ var auth = require('../auth');
 
 module.exports = function(app) {
 	app.get('/feedback/mine', auth.checkUser(), function(req, res) {
-		var userId = req.user._id;
-		db.Feedback.find({ to: userId }, function(err, f) {
+		var group = req.user.group._id;
+		db.Feedback.find({ to: group }, function(err, f) {
 			if(err) {
 				res.send({ status: 'error', message: 'internal server error' });
 				return;
@@ -32,7 +32,7 @@ module.exports = function(app) {
 			res.send({ status: 'error', message: 'you cannot give yourself a feedback' });
 			return;
 		}
-		db.User.findOne({ _id: to }, function(err, toUser) {
+		db.Group.findOne({ _id: to }, function(err, toUser) {
 			if(!toUser) {
 				res.send({ status: 'error', message: 'user does not exist' });
 				return;
@@ -56,13 +56,49 @@ module.exports = function(app) {
 	app.post('/feedback/list', auth.checkAdmin(), function(req, res) {
 		var cond = {};
 		if(req.body.condition) cond = req.body.condition;
-		db.Feedback.find(cond).populate('from').populate('to').exec(function(err, list) {
-			if(err) {
-				res.send({ status: 'error', message: 'internal server error' });
-				return;
-			}
-			res.send({ status: 'ok', feedback: list });
-		});
+		var condFrom = {};
+		if(cond.to) condFrom['to'] = cond.to;
+		if(cond.from) {
+			db.User.find({ group: cond.from }, { _id: 1 }, function(err, users) {
+				if(err) {
+					res.send({ status: 'error', message: 'internal server error' });
+					return;
+				}
+				var ids = users.map(function(user) { return user._id; });
+				condFrom['from'] = {
+					$in: ids
+				};
+				db.Feedback.find(condFrom).populate({
+					path: 'from',
+					select: 'username group',
+					populate: {
+						path: 'group',
+						model: db.Group
+					}
+				}).populate('to').exec(function(err, list) {
+					if(err) {
+						res.send({ status: 'error', message: 'internal server error' });
+						return;
+					}
+					res.send({ status: 'ok', feedback: list });
+				});
+			})
+		} else {
+			db.Feedback.find(condFrom).populate({
+				path: 'from',
+				select: 'username group',
+				populate: {
+					path: 'group',
+					model: db.Group
+				}
+			}).populate('to').exec(function(err, list) {
+				if(err) {
+					res.send({ status: 'error', message: 'internal server error' });
+					return;
+				}
+				res.send({ status: 'ok', feedback: list });
+			});
+		}
 	});
 
 	app.get('/feedback/remove', auth.checkAdmin(), function(req, res) {

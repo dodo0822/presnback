@@ -1,0 +1,36 @@
+<div class="col-md-4 col-md-offset-4">
+	<div class="panel panel-default">
+		<div class="panel-heading"><h3 class="panel-title"><strong><i class="fa fa-sign-in"></i>&nbsp;註冊帳號</strong></h3></div>
+		<div class="panel-body">
+			<form role="form" name="registerForm" ng-submit="submit(data)" novalidate>
+				<div class="form-group">
+					<label for="username">使用者名稱：</label>
+					<input type="text" class="form-control" ng-model="data.username" id="username" placeholder="Please enter user name...">
+				</div>
+				<div class="form-group">
+					<label for="password">密碼：</label>
+					<input type="password" class="form-control" ng-model="data.password" id="password" placeholder="Please enter your password...">
+				</div>
+				<div class="form-group">
+					<label for="passwordRepeat">再輸入一次密碼：</label>
+					<input type="password" class="form-control" ng-model="data.passwordRepeat" id="passwordRepeat" placeholder="Please repeat your password...">
+				</div>
+				<div class="form-group">
+					<label for="email">Email：</label>
+					<input type="text" class="form-control" ng-model="data.email" id="email" placeholder="Please enter email...">
+				</div>
+				<div class="form-group">
+					<label for="name">姓名：</label>
+					<input type="text" class="form-control" ng-model="data.name" id="name" placeholder="Please enter your name...">
+				</div>
+				<div class="form-group">
+					<label for="group">組別：</label>
+					<select id="group" class="form-control" ng-model="data.group">
+						<option ng-repeat="g in groups" ng-value="g._id">第 {{ g.groupNum }} 組</option>
+					</select>
+				</div>
+				<button type="submit" class="btn btn-primary">送出</button>&nbsp;&nbsp;&nbsp;<span class="text-danger" ng-if="error">{{ error }}</span>
+			</form>
+		</div>
+	</div>
+</div>

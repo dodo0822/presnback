@@ -4,11 +4,16 @@ mongoose.connect('mongodb://localhost/presnback');
 
 var Schema = mongoose.Schema;
 
+var groupSchema = new Schema({
+	groupNum: Number,
+	needsFeedback: Boolean
+});
+
 var userSchema = new Schema({
 	username: String,
 	password: String,
 	email: String,
-	groupNum: Number,
+	group: { type: Schema.Types.ObjectId, ref: 'Group' },
 	name: String
 });
 
@@ -22,13 +27,14 @@ var adminSchema = new Schema({
 
 var feedbackSchema = new Schema({
 	from: { type: Schema.Types.ObjectId, ref: 'User' },
-	to: { type: Schema.Types.ObjectId, ref: 'User' },
+	to: { type: Schema.Types.ObjectId, ref: 'Group' },
 	time: Date,
 	content: String
 });
 
 module.exports.jwtSecret = 'IF4GhO2i71cCL8HzPn82k9VnBNcQIAP3';
 
+module.exports.Group = mongoose.model('Group', groupSchema);
 module.exports.User = mongoose.model('User', userSchema);
 module.exports.Admin = mongoose.model('Admin', adminSchema);
 module.exports.Feedback = mongoose.model('Feedback', feedbackSchema);

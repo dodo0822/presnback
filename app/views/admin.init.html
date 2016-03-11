@@ -1,7 +1,30 @@
-<h2>初始化資料庫</h2>
-<form ng-submit="doInit()">
+<h2>初始化評分資料</h2>
+<form ng-submit="doInitFeedback()">
+	<p class="text-warning">警告：即將要把全部評分資料刪除！</p>
+	<p>{{ feedbackMessage }}</p>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>組別</th>
+				<th>要被評分</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="g in table">
+				<td>第 {{ g.groupNum }} 組</td>
+				<td><input type="checkbox" ng-model="table[$index].needsFeedback"></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">確定初始化</button>
+	</div>
+</form>
+<hr>
+<h2>初始化組別資料</h2>
+<form ng-submit="doInitGroup(groupNum)">
 	<p class="text-warning">警告：即將要把全部學生及評分資料刪除！</p>
-	<p>{{ message }}</p>
+	<p>{{ groupMessage }}</p>
 	<div class="form-group">
 		<label for="group-num">組別數</label>
 		<input class="form-control" ng-model="groupNum" type="text" id="group-num" placeholder="請輸入組別數目.." style="max-width: 200px;">

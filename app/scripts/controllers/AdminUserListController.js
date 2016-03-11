@@ -2,10 +2,12 @@ angular.module('app').controller('AdminUserListController', function($scope, Use
 	$scope.table = [];
 	$scope.message = '';
 
-	$scope.submit = function() {
-		$scope.message = '';
-		UserService.update($scope.table).then(function(resp) {
-			$scope.message = 'OK.';
+	$scope.remove = function(idx) {
+		$scope.message = '刪除中..';
+		UserService.remove($scope.table[idx]._id).then(function(resp) {
+			if(resp.status == 'ok') {
+				$scope.message = '完成。';
+			}
 		});
 	};
 

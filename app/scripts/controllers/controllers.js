@@ -8,3 +8,4 @@ require('./StudentFeedbackMineController');
 require('./StudentFeedbackGiveController');
 require('./HomeController');
 require('./LoginController');
+require('./RegisterController');

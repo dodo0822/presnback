@@ -14,7 +14,7 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 			$scope.message = '請輸入資料！';
 			return;
 		}
-		var to = $scope.users[$scope.to]._id;
+		var to = $scope.groups[$scope.to]._id;
 		FeedbackService.give(to, $scope.content).then(function(resp) {
 			if(resp.status == 'ok') {
 				$scope.message = '評分成功送出！';
@@ -22,14 +22,17 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 		});
 	};
 
-	UserService.list().then(function(resp) {
-		var list = resp.users;
-		for(var i = 0; i < list.length; ++i) {
-			if(list[i]._id == Session.userId) {
-				list.splice(i, 1);
-				break;
+	UserService.userProfile().then(function(profileResp) {
+		UserService.listGroup().then(function(resp) {
+			var list = resp.groups;
+			for(var i = 0; i < list.length; ++i) {
+				if(list[i].groupNum == profileResp.user.groupNum || !list[i].needsFeedback) {
+					list.splice(i, 1);
+					--i;
+				}
 			}
-		}
-		$scope.users = list;
+			console.log(list);
+			$scope.groups = list;
+		});
 	});
 });

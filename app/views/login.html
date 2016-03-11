@@ -15,7 +15,7 @@
 					<label for="password">密碼：</label>
 					<input type="password" class="form-control" ng-model="credentials.password" id="password" placeholder="Please enter your password...">
 				</div>
-				<button type="submit" class="btn btn-primary">送出</button>&nbsp;&nbsp;&nbsp;<span class="text-danger" ng-if="error">{{ error }}</span>
+				<button type="submit" class="btn btn-primary">送出</button>&nbsp;&nbsp;<a class="btn btn-warning" ui-sref="register">註冊</a>&nbsp;<span class="text-danger" ng-if="error">{{ error }}</span>
 			</form>
 		</div>
 	</div>

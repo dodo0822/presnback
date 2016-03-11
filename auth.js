@@ -30,7 +30,7 @@ module.exports = {
 				res.status(401).send({ status: 'error', message: 'Session expired.' });
 				return;
 			}
-			db.User.findOne({ _id: payload._id }, function(err, user) {
+			db.User.findOne({ _id: payload._id }).populate('group').exec(function(err, user) {
 				if(err) {
 					if(uploads) fs.unlinkSync(__dirname + '/' + req.file.path);
 					res.status(500).send({ status: 'error', message: 'Internal server error.' });

@@ -6,6 +6,7 @@ var tplStudent = require('../views/student.html');
 var tplStudentFeedbackMine = require('../views/student.feedback.mine.html');
 var tplStudentFeedbackGive = require('../views/student.feedback.give.html');
 var tplLogin = require('../views/login.html');
+var tplRegister = require('../views/register.html');
 
 angular.module('app', [ 'ui.router', 'ngStorage' ]);
 
@@ -80,6 +81,11 @@ angular.module('app')
 			url: '/login',
 			templateUrl: tplLogin,
 			controller: 'LoginController'
+		})
+		.state('register', {
+			url: '/register',
+			templateUrl: tplRegister,
+			controller: 'RegisterController'
 		});
 
 	$urlRouterProvider.otherwise(function($injector) {

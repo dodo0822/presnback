@@ -1,6 +1,12 @@
 angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $rootScope, Session, $localStorage) {
 	var userService = {
 
+		listGroup: function() {
+			return $http.get('/api/group/list').then(function(resp) {
+				return resp.data;
+			});
+		},
+
 		list: function() {
 			return $http.get('/api/user/list', { params: { token: Session.token } }).then(function(resp) {
 				return resp.data;
@@ -11,6 +17,18 @@ angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $r
 			return $http.post('/api/user/update', {
 				table: table,
 				token: Session.token
+			}).then(function(resp) {
+				return resp.data;
+			});
+		},
+
+		register: function(username, password, email, name, group) {
+			return $http.post('/api/user/register', {
+				username: username,
+				password: password,
+				email: email,
+				name: name,
+				groupId: group
 			}).then(function(resp) {
 				return resp.data;
 			});
@@ -35,6 +53,14 @@ angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $r
 				});
 				return promise;
 			}
+		},
+
+		userProfile: function() {
+			return $http.get('/api/user/profile', { params: {
+				token: Session.token
+			} }).then(function(resp) {
+				return resp.data;
+			});
 		},
 
 		restore: function(token, type) {
