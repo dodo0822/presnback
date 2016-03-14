@@ -5,7 +5,7 @@
 			<form role="form" name="loginForm" ng-submit="login(credentials)" novalidate>
 				<div class="form-group">
 					<label>身份：</label>
-					<label><input type="radio" ng-model="credentials.type" value="1"> 同學</label> <label><input type="radio" ng-model="credentials.type" value="2"> 助教</label>
+					<label><input type="radio" ng-model="credentials.type" ng-init="credentials.type = 1" value="1"> 同學</label> <label><input type="radio" ng-model="credentials.type" value="2"> 助教</label>
 				</div>
 				<div class="form-group">
 					<label for="username">使用者名稱：</label>
