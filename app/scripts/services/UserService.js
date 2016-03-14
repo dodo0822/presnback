@@ -22,12 +22,13 @@ angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $r
 			});
 		},
 
-		register: function(username, password, email, name, group) {
+		register: function(username, password, email, name, studentId, group) {
 			return $http.post('/api/user/register', {
 				username: username,
 				password: password,
 				email: email,
 				name: name,
+				studentId: studentId,
 				groupId: group
 			}).then(function(resp) {
 				return resp.data;
@@ -53,6 +54,16 @@ angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $r
 				});
 				return promise;
 			}
+		},
+
+		changePassword: function(c, n) {
+			return $http.post('/api/user/changePassword', {
+				currentPassword: c,
+				newPassword: n,
+				token: Session.token
+			}).then(function(resp) {
+				return resp.data;
+			});
 		},
 
 		userProfile: function() {

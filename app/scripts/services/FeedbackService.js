@@ -10,6 +10,15 @@ angular.module('app').service('FeedbackService', function($http, Session) {
 			});
 		},
 
+		lookup: function(to) {
+			return $http.get('/api/feedback/lookup', { params: {
+				to: to,
+				token: Session.token
+			} }).then(function(resp) {
+				return resp.data;
+			});
+		},
+
 		give: function(to, content) {
 			return $http.post('/api/feedback/give', {
 				token: Session.token,

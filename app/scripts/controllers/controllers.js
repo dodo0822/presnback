@@ -6,6 +6,7 @@ require('./AdminFeedbackController');
 require('./StudentController');
 require('./StudentFeedbackMineController');
 require('./StudentFeedbackGiveController');
+require('./StudentSettingsController');
 require('./HomeController');
 require('./LoginController');
 require('./RegisterController');

@@ -3,7 +3,10 @@ var jwt = require('jwt-simple');
 var moment = require('moment');
 var validator = require('validator');
 var async = require('async');
+var request = require('request');
+var hat = require('hat');
 var db = require('../database');
+var config = require('../config');
 var auth = require('../auth');
 
 module.exports = function(app) {
@@ -18,7 +21,7 @@ module.exports = function(app) {
 	});
 
 	app.post('/user/register', function(req, res) {
-		if(!req.body.username || !req.body.password || !req.body.email || !req.body.name || !req.body.groupId) {
+		if(!req.body.username || !req.body.password || !req.body.email || !req.body.name || !req.body.groupId || !req.body.studentId) {
 			res.send({ status: 'error', message: 'Invalid data.' });
 			return;
 		}
@@ -26,25 +29,48 @@ module.exports = function(app) {
 			res.send({ status: 'error', message: 'Invalid data.' });
 			return;
 		}
-		db.User.findOne({ username: req.body.username }, function(err, exist) {
-			if(exist) {
-				res.send({ status: 'error', message: 'username already used' });
+		db.Group.findOne({ _id: req.body.groupId}, function(err, group) {
+			if(!group) {
+				res.send({ status: 'error', message: 'group not found' });
 				return;
 			}
-			bcrypt.hash(req.body.password, 8, function(err, pw) {
-				var user = new db.User({
-					username: req.body.username,
-					password: pw,
-					email: req.body.email,
-					name: req.body.name,
-					group: req.body.groupId
-				});
-				user.save(function(err) {
-					if(err) {
-						res.send({ status: 'error', message: 'internal server error.'});
-						return;
-					}
-					res.send({ status: 'ok' });
+			db.User.findOne({ username: req.body.username }, function(err, exist) {
+				if(exist) {
+					res.send({ status: 'error', message: 'username already used' });
+					return;
+				}
+				bcrypt.hash(req.body.password, 8, function(err, pw) {
+					var token = hat();
+					var user = new db.User({
+						username: req.body.username,
+						password: pw,
+						email: req.body.email,
+						name: req.body.name,
+						token: token,
+						verified: false,
+						studentId: req.body.studentId,
+						group: req.body.groupId
+					});
+					user.save(function(err) {
+						if(err) {
+							res.send({ status: 'error', message: 'internal server error.'});
+							return;
+						}
+						request.post('https://api.mailgun.net/v3/' + config.mailgunDomain + '/messages', {
+							auth: {
+								user: 'api',
+								pass: config.mailgunKey
+							},
+							form: {
+								from: 'Presnback Team <presnback@' + config.mailgunDomain + '>',
+								to: req.body.email,
+								subject: '歡迎加入 Presnback，請驗證您的 Email',
+								html: '您好，<br><br>在此歡迎您加入 Presnback，<br>為了完成註冊程序，請點選以下連結驗證您的 Email。<br><a href="' + config.siteUrl + '/api/user/verify?token=' + token + '">' + config.siteUrl + '/api/user/verify?token=' + token + '</a><br><br>Presnback Team'
+							}
+						}, function(err, response, body) {
+							res.send({ status: 'ok' });
+						});
+					});
 				});
 			});
 		});
@@ -75,6 +101,10 @@ module.exports = function(app) {
 					res.send({ status: 'error', message: 'Username or password is wrong.'});
 					return;
 				}
+				if(!user.verified) {
+					res.send({ status: 'error', message: 'You havn\'t verified your email yet.'});
+					return;
+				}
 				var payload = {
 					_id: user._id,
 					expire: moment().add(1, 'd').format()
@@ -86,6 +116,32 @@ module.exports = function(app) {
 					groupNum: user.group.groupNum,
 					name: user.name
 				}, token: jwt.encode(payload, db.jwtSecret) });
+			});
+		});
+	});
+
+	app.get('/user/verify', function(req, res) {
+		if(!req.query.token) {
+			res.send('Invalid request.');
+			return;
+		}
+		db.User.findOne({ token: req.query.token }, function(err, user) {
+			if(err) {
+				res.send('An internal server error occured, please check later.');
+				return;
+			}
+			if(!user) {
+				res.send('Token is invalid.');
+				return;
+			}
+			user.verified = true;
+			user.save(function(err, user) {
+				if(err) {
+					res.send('An internal server error occured, please check later.');
+					return;
+				}
+				res.send('Thank you, your email has been verified. Please go back and log in.');
+				return;
 			});
 		});
 	});
@@ -130,6 +186,29 @@ module.exports = function(app) {
 				res.send({ status: 'ok' });
 			});
 		});
+	});
+
+	app.post('/user/changePassword', auth.checkUser(), function(req, res) {
+		if(!req.body.currentPassword || !req.body.newPassword) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		bcrypt.compare(req.body.currentPassword, req.user.password, function(err, ok) {
+			if(!ok) {
+				res.send({ status: 'error', message: 'current password is wrong' });
+				return;
+			}
+			bcrypt.hash(req.body.newPassword, 8, function(err, hash) {
+				db.User.findOneAndUpdate({ _id: req.user._id }, { $set: { password: hash } }, { upsert: false }, function(err) {
+					if(err) {
+						res.send({ status: 'error', message: 'internal server error' });
+						return;
+					}
+					res.send({ status: 'ok', message: 'password changed' });
+					return;
+				});
+			});
+		})
 	});
 
 	/*app.post('/user/update', auth.checkAdmin(), function(req, res) {

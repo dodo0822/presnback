@@ -5,6 +5,7 @@ var tplAdminFeedback = require('../views/admin.feedback.html');
 var tplStudent = require('../views/student.html');
 var tplStudentFeedbackMine = require('../views/student.feedback.mine.html');
 var tplStudentFeedbackGive = require('../views/student.feedback.give.html');
+var tplStudentSettings = require('../views/student.settings.html');
 var tplLogin = require('../views/login.html');
 var tplRegister = require('../views/register.html');
 
@@ -51,6 +52,12 @@ angular.module('app')
 			url: '/give',
 			templateUrl: tplStudentFeedbackGive,
 			controller: 'StudentFeedbackGiveController',
+			resolve: checkAuth(1)
+		})
+		.state('student.settings', {
+			url: '/settings',
+			templateUrl: tplStudentSettings,
+			controller: 'StudentSettingsController',
 			resolve: checkAuth(1)
 		})
 		.state('admin', {

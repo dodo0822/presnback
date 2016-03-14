@@ -13,7 +13,7 @@
 		<div class="col-md-9">
 			<div class="form-group">
 				<p ng-if="to != -1"><strong>給第 {{ groups[to].groupNum }} 組的評分</strong></p>
-				<label for="feedback-content">評分內容：</label>
+				<label for="feedback-content">評分內容：（若已給過評分則自動帶入上次的內容）</label>
 				<textarea rows="10" id="feedback-content" class="form-control" ng-model="content"></textarea>
 			</div>
 			<p>{{ message }}</p>

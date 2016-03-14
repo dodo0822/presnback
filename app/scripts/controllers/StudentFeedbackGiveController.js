@@ -1,5 +1,5 @@
 angular.module('app').controller('StudentFeedbackGiveController', function($scope, Session, UserService, FeedbackService) {
-	$scope.users = [];
+	$scope.groups = [];
 	$scope.to = -1;
 	$scope.content = '';
 	$scope.message = '';
@@ -7,6 +7,14 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 	$scope.select = function(idx) {
 		$scope.to = idx;
 		$scope.message = '';
+
+		FeedbackService.lookup($scope.groups[idx]._id).then(function(resp) {
+			if(resp.found) {
+				$scope.content = resp.feedback.content;
+			} else {
+				$scope.content = '';
+			}
+		});
 	};
 
 	$scope.give = function() {

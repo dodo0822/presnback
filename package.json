@@ -38,6 +38,7 @@
     "body-parser": "^1.15.0",
     "bootstrap-sass": "^3.3.6",
     "express": "^4.13.4",
+    "hat": "0.0.3",
     "html-loader": "^0.4.3",
     "jquery": "^2.2.1",
     "jwt-simple": "^0.4.1",
@@ -46,6 +47,7 @@
     "ngstorage": "^0.3.10",
     "prompt": "^1.0.0",
     "proxy-middleware": "^0.15.0",
+    "request": "^2.69.0",
     "validator": "^5.1.0"
   }
 }

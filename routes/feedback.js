@@ -20,6 +20,20 @@ module.exports = function(app) {
 		});
 	});
 
+	app.get('/feedback/lookup', auth.checkUser(), function(req, res) {
+		if(!req.query.to) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		db.Feedback.findOne({ to: req.query.to, from: req.user._id }, function(err, f) {
+			if(!f) {
+				res.send({ status: 'ok', found: false });
+				return;
+			}
+			res.send({ status: 'ok', found: true, feedback: f });
+		});
+	})
+
 	app.post('/feedback/give', auth.checkUser(), function(req, res) {
 		if(!req.body.to || !req.body.content) {
 			res.send({ status: 'error', message: 'invalid request' });
@@ -37,13 +51,13 @@ module.exports = function(app) {
 				res.send({ status: 'error', message: 'user does not exist' });
 				return;
 			}
-			var f = new db.Feedback({
+			db.Feedback.findOneAndUpdate({
 				from: from,
-				to: to,
+				to: to
+			}, {
 				content: content,
 				time: new Date()
-			});
-			f.save(function(err) {
+			}, { upsert: true }, function(err, f) {
 				if(err) {
 					res.send({ status: 'error', message: 'internal server error' });
 					return;

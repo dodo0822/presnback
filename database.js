@@ -14,7 +14,10 @@ var userSchema = new Schema({
 	password: String,
 	email: String,
 	group: { type: Schema.Types.ObjectId, ref: 'Group' },
-	name: String
+	name: String,
+	token: String,
+	studentId: String,
+	verified: Boolean
 });
 
 var adminSchema = new Schema({

@@ -6,6 +6,7 @@
 			<th>組別</th>
 			<th>帳號</th>
 			<th>姓名</th>
+			<th>學號</th>
 			<th>動作</th>
 		</tr>
 	</thead>
@@ -14,6 +15,7 @@
 			<td>{{ u.groupNum }}</td>
 			<td>{{ u.username }}</td>
 			<td>{{ u.name }}</td>
+			<td>{{ u.studentId }}</td>
 			<td><a href="javascript:void(0)" ng-click="remove($index)">刪除</a></td>
 		</tr>
 	</tbody>
