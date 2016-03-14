@@ -1,8 +1,18 @@
+var validator = require('validator');
+
 angular.module('app').controller('RegisterController', function($scope, UserService, $state) {
 	$scope.groups = [];
 	$scope.submit = function(data) {
+		if(!data) {
+			$scope.error = '請輸入全部欄位！';
+			return;
+		}
 		if(!data.username || !data.password || !data.passwordRepeat || !data.email || !data.name || !data.group || data.password !== data.passwordRepeat) {
 			$scope.error = '請輸入全部欄位！';
+			return;
+		}
+		if(!validator.isEmail(data.email)) {
+			$scope.error = 'Email 格式錯誤！';
 			return;
 		}
 		UserService.register(data.username, data.password, data.email, data.name, data.group).then(function(resp) {

@@ -22,20 +22,30 @@ module.exports = function(app) {
 			res.send({ status: 'error', message: 'Invalid data.' });
 			return;
 		}
-		bcrypt.hash(req.body.password, 8, function(err, pw) {
-			var user = new db.User({
-				username: req.body.username,
-				password: pw,
-				email: req.body.email,
-				name: req.body.name,
-				group: req.body.groupId
-			});
-			user.save(function(err) {
-				if(err) {
-					res.send({ status: 'error', message: 'internal server error.'});
-					return;
-				}
-				res.send({ status: 'ok' });
+		if(!validator.isEmail(req.body.email)) {
+			res.send({ status: 'error', message: 'Invalid data.' });
+			return;
+		}
+		db.User.findOne({ username: req.body.username }, function(err, exist) {
+			if(exist) {
+				res.send({ status: 'error', message: 'username already used' });
+				return;
+			}
+			bcrypt.hash(req.body.password, 8, function(err, pw) {
+				var user = new db.User({
+					username: req.body.username,
+					password: pw,
+					email: req.body.email,
+					name: req.body.name,
+					group: req.body.groupId
+				});
+				user.save(function(err) {
+					if(err) {
+						res.send({ status: 'error', message: 'internal server error.'});
+						return;
+					}
+					res.send({ status: 'ok' });
+				});
 			});
 		});
 	});
