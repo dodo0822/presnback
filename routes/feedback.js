@@ -13,7 +13,8 @@ module.exports = function(app) {
 			for(var i = 0; i < f.length; ++i) {
 				ret.push({
 					time: f[i].time,
-					content: f[i].content
+					content: f[i].content,
+					score: f[i].score
 				});
 			}
 			res.send({ status: 'ok', feedback: ret });
@@ -35,7 +36,15 @@ module.exports = function(app) {
 	})
 
 	app.post('/feedback/give', auth.checkUser(), function(req, res) {
-		if(!req.body.to || !req.body.content) {
+		if(!req.body.to || !req.body.content || !req.body.score) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		if(!Number.isInteger(req.body.score)) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		if((req.body.score == 1 || req.body.score == 4) && req.body.content.length < 20) {
 			res.send({ status: 'error', message: 'invalid request' });
 			return;
 		}
@@ -56,6 +65,7 @@ module.exports = function(app) {
 				to: to
 			}, {
 				content: content,
+				score: req.body.score,
 				time: new Date()
 			}, { upsert: true }, function(err, f) {
 				if(err) {

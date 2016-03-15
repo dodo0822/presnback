@@ -19,11 +19,12 @@ angular.module('app').service('FeedbackService', function($http, Session) {
 			});
 		},
 
-		give: function(to, content) {
+		give: function(to, content, score) {
 			return $http.post('/api/feedback/give', {
 				token: Session.token,
 				to: to,
-				content: content
+				content: content,
+				score: score
 			}).then(function(resp) {
 				return resp.data;
 			});

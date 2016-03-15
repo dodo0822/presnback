@@ -13,6 +13,8 @@
 		<div class="col-md-9">
 			<div class="form-group">
 				<p ng-if="to != -1"><strong>給第 {{ groups[to].groupNum }} 組的評分</strong></p>
+				<p><strong>評分分數：</strong></p>
+				<p><span ng-repeat="s in [ 4, 3, 2, 1 ]"><input ng-attr-id="{{ 'score-ratio-' + s }}" name="score" type="radio" ng-model="$parent.score" ng-value="s">&nbsp;&nbsp;<label ng-attr-for="{{ 'score-ratio-' + s }}" style="font-weight: normal;">{{ scoreDesc[s] }}</label><br></span></p>
 				<label for="feedback-content">評分內容：（若已給過評分則自動帶入上次的內容）</label>
 				<textarea rows="10" id="feedback-content" class="form-control" ng-model="content"></textarea>
 			</div>

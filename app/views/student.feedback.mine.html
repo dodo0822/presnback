@@ -3,6 +3,7 @@
 <div ng-repeat="f in list">
 	<p><strong>於 {{ moment(f.time).calendar() }} 收到的評分：</strong></p>
 	<div>
+		<p><strong>分數：</strong>{{ scoreDesc[f.score] }}</p>
 		<p>{{ f.content }}</p>
 	</div>
 	<hr>

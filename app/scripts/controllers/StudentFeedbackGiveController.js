@@ -1,29 +1,39 @@
-angular.module('app').controller('StudentFeedbackGiveController', function($scope, Session, UserService, FeedbackService) {
+angular.module('app').controller('StudentFeedbackGiveController', function($scope, Session, UserService, FeedbackService, SCORE_DESC) {
 	$scope.groups = [];
 	$scope.to = -1;
 	$scope.content = '';
+	$scope.score = -1;
 	$scope.message = '';
+
+	$scope.scoreDesc = SCORE_DESC;
 
 	$scope.select = function(idx) {
 		$scope.to = idx;
 		$scope.message = '';
+		$scope.score = -1;
 
 		FeedbackService.lookup($scope.groups[idx]._id).then(function(resp) {
 			if(resp.found) {
 				$scope.content = resp.feedback.content;
+				$scope.score = resp.feedback.score;
 			} else {
 				$scope.content = '';
+				$scope.scope = -1;
 			}
 		});
 	};
 
 	$scope.give = function() {
-		if(!$scope.content || $scope.to == -1) {
+		if(!$scope.content || $scope.to == -1 || !($scope.score <= 4 && $scope.score >= 1)) {
 			$scope.message = '請輸入資料！';
 			return;
 		}
+		if(($scope.score == 4 || $scope.score == 1) && $scope.content.length < 20) {
+			$scope.message = '請輸入至少 20 字的評分內容！';
+			return;
+		}
 		var to = $scope.groups[$scope.to]._id;
-		FeedbackService.give(to, $scope.content).then(function(resp) {
+		FeedbackService.give(to, $scope.content, $scope.score).then(function(resp) {
 			if(resp.status == 'ok') {
 				$scope.message = '評分成功送出！';
 			}
