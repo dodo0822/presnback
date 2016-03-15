@@ -9,7 +9,7 @@ var tplStudentSettings = require('../views/student.settings.html');
 var tplLogin = require('../views/login.html');
 var tplRegister = require('../views/register.html');
 
-angular.module('app', [ 'ui.router', 'ngStorage' ]);
+angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar' ]);
 
 require('./constants');
 require('./controllers/controllers');

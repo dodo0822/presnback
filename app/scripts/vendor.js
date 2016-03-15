@@ -4,4 +4,5 @@ module.exports = function() {
 	require('angular-ui-router');
 	require('ngstorage');
 	require('bootstrap-loader');
+	require('angular-loading-bar');
 };
