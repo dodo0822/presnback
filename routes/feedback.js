@@ -4,7 +4,7 @@ var auth = require('../auth');
 module.exports = function(app) {
 	app.get('/feedback/mine', auth.checkUser(), function(req, res) {
 		var group = req.user.group._id;
-		db.Feedback.find({ to: group }, function(err, f) {
+		db.Feedback.find({ to: group }).sort('-time').exec(function(err, f) {
 			if(err) {
 				res.send({ status: 'error', message: 'internal server error' });
 				return;
