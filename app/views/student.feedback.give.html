@@ -16,6 +16,8 @@
 				<p><strong>報告主題：</strong><em ng-if="!topic">（沒有設定QQ）</em><span ng-if="topic">{{ topic }}</span></p>
 				<p><strong>評分分數：</strong></p>
 				<p><span ng-repeat="s in [ 4, 3, 2, 1 ]"><input ng-attr-id="{{ 'score-ratio-' + s }}" name="score" type="radio" ng-model="$parent.score" ng-value="s">&nbsp;&nbsp;<label ng-attr-for="{{ 'score-ratio-' + s }}" style="font-weight: normal;">{{ scoreDesc[s] }}</label><br></span></p>
+				<p><strong>特別投票：</strong></p>
+				<p><span ng-repeat="s in ['a', 'b', 'c']"><input ng-attr-id="{{ 'special-checkbox-' + s }}" type="checkbox" ng-model="$parent.special[s]">&nbsp;<label ng-attr-for="{{ 'special-checkbox-' + s }}" style="font-weight: normal;">{{ specialDesc[s] }}</label>&nbsp;&nbsp;</span></p> 
 				<label for="feedback-content">評分內容：（若已給過評分則自動帶入上次的內容）</label>
 				<textarea rows="10" id="feedback-content" class="form-control" ng-model="content"></textarea>
 			</div>

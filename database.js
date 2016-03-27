@@ -35,7 +35,8 @@ var feedbackSchema = new Schema({
 	to: { type: Schema.Types.ObjectId, ref: 'Group' },
 	time: Date,
 	content: String,
-	score: Number
+	score: Number,
+	special: Object
 });
 
 module.exports.jwtSecret = 'IF4GhO2i71cCL8HzPn82k9VnBNcQIAP3';

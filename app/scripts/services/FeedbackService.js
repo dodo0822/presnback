@@ -2,6 +2,15 @@ angular.module('app').service('FeedbackService', function($http, Session) {
 
 	return {
 
+		leaderboard: function(item) {
+			return $http.get('/api/feedback/leaderboard', { params: {
+				token: Session.token,
+				item: item
+			} }).then(function(resp) {
+				return resp.data;
+			});
+		},
+
 		mine: function() {
 			return $http.get('/api/feedback/mine', { params: {
 				token: Session.token
@@ -19,12 +28,13 @@ angular.module('app').service('FeedbackService', function($http, Session) {
 			});
 		},
 
-		give: function(to, content, score) {
+		give: function(to, content, score, special) {
 			return $http.post('/api/feedback/give', {
 				token: Session.token,
 				to: to,
 				content: content,
-				score: score
+				score: score,
+				special: special
 			}).then(function(resp) {
 				return resp.data;
 			});

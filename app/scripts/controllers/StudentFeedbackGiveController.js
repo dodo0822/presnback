@@ -1,26 +1,43 @@
-angular.module('app').controller('StudentFeedbackGiveController', function($scope, Session, UserService, FeedbackService, SCORE_DESC) {
+angular.module('app').controller('StudentFeedbackGiveController', function($scope, Session, UserService, FeedbackService, SCORE_DESC, SPECIAL_DESC) {
 	$scope.groups = [];
 	$scope.to = -1;
 	$scope.content = '';
 	$scope.score = -1;
 	$scope.message = '';
 	$scope.topic = '';
+	$scope.special = {
+		a: false,
+		b: false,
+		c: false
+	};
 
 	$scope.scoreDesc = SCORE_DESC;
+	$scope.specialDesc = SPECIAL_DESC;
 
 	$scope.select = function(idx) {
 		$scope.to = idx;
 		$scope.message = '';
 		$scope.score = -1;
 		$scope.topic = $scope.groups[idx].topic;
+		$scope.special = {
+			a: false,
+			b: false,
+			c: false
+		};
 
 		FeedbackService.lookup($scope.groups[idx]._id).then(function(resp) {
 			if(resp.found) {
 				$scope.content = resp.feedback.content;
 				$scope.score = resp.feedback.score;
+				$scope.special = resp.feedback.special;
 			} else {
 				$scope.content = '';
 				$scope.scope = -1;
+				$scope.special = {
+					a: false,
+					b: false,
+					c: false
+				};
 			}
 		});
 	};
@@ -35,7 +52,7 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 			return;
 		}
 		var to = $scope.groups[$scope.to]._id;
-		FeedbackService.give(to, $scope.content, $scope.score).then(function(resp) {
+		FeedbackService.give(to, $scope.content, $scope.score, $scope.special).then(function(resp) {
 			if(resp.status == 'ok') {
 				$scope.message = '評分成功送出！';
 			}

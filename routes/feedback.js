@@ -1,7 +1,81 @@
+var async = require('async');
 var db = require('../database');
 var auth = require('../auth');
 
 module.exports = function(app) {
+	app.get('/feedback/leaderboard', auth.checkUser(), function(req, res) {
+		if(!req.query.item) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		var item = req.query.item;
+		if(!(item == 'a' || item == 'b' || item == 'c')) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		var obj = {};
+		db.Feedback.find({}).exec(function(err, f) {
+			for(var i = 0; i < f.length; ++i) {
+				if(f[i].special[item]) {
+					if(!obj.hasOwnProperty(f[i].to)) {
+						obj[f[i].to] = 1;
+					} else {
+						obj[f[i].to]++;
+					}
+				}
+			}
+			
+			var leaderboard = [];
+			for(var k in obj) {
+				leaderboard.push({
+					id: k,
+					number: obj[k]
+				});
+			}
+
+			leaderboard.sort(function(a, b) {
+				return b.number - a.number;
+			});
+
+			if(leaderboard.length > 3) leaderboard.splice(2, leaderboard.length-3);
+
+			var waterfall = [];
+
+			function genWaterfall(i) {
+				var row = leaderboard[i];
+				return function(callback) {
+					db.Group.findOne({ _id: row.id }, function(err, group) {
+						var topic = group.topic;
+						db.User.find({ group: group._id }, function(err, users) {
+							var list = [];
+							for(var j = 0; j < users.length; ++j) {
+								list.push({
+									_id: users[j]._id,
+									name: users[j].name,
+									fbid: users[j].fbid
+								});
+							}
+							callback(err, { topic: topic, groupNum: group.groupNum, users: list });
+						});
+					});
+				};
+			}
+
+			for(var i = 0; i < leaderboard.length; ++i) {
+				waterfall.push(genWaterfall(i));
+			}
+
+			async.parallel(waterfall, function(err, results) {
+				for(var i = 0; i < leaderboard.length; ++i) {
+					leaderboard[i].topic = results[i].topic;
+					leaderboard[i].groupNum = results[i].groupNum;
+					leaderboard[i].users = results[i].users;
+				}
+				res.send({ status: 'ok', leaderboard: leaderboard });
+			});
+		});
+	});
+
 	app.get('/feedback/mine', auth.checkUser(), function(req, res) {
 		var group = req.user.group._id;
 		db.Feedback.find({ to: group }).sort('-time').exec(function(err, f) {
@@ -36,7 +110,7 @@ module.exports = function(app) {
 	})
 
 	app.post('/feedback/give', auth.checkUser(), function(req, res) {
-		if(!req.body.to || !req.body.content || !req.body.score) {
+		if(!req.body.to || !req.body.content || !req.body.score || !req.body.special) {
 			res.send({ status: 'error', message: 'invalid request' });
 			return;
 		}
@@ -51,6 +125,11 @@ module.exports = function(app) {
 		var from = req.user._id;
 		var to = req.body.to;
 		var content = req.body.content;
+		var special = {
+			a: req.body.special.a || false,
+			b: req.body.special.b || false,
+			c: req.body.special.c || false
+		};
 		if(from == to) {
 			res.send({ status: 'error', message: 'you cannot give yourself a feedback' });
 			return;
@@ -66,7 +145,8 @@ module.exports = function(app) {
 			}, {
 				content: content,
 				score: req.body.score,
-				time: new Date()
+				time: new Date(),
+				special: special
 			}, { upsert: true }, function(err, f) {
 				if(err) {
 					res.send({ status: 'error', message: 'internal server error' });

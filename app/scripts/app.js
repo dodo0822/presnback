@@ -3,6 +3,7 @@ var tplAdminInit = require('../views/admin.init.html');
 var tplAdminUserList = require('../views/admin.userlist.html');
 var tplAdminFeedback = require('../views/admin.feedback.html');
 var tplStudent = require('../views/student.html');
+var tplStudentLeaderboard = require('../views/student.leaderboard.html');
 var tplStudentFeedbackMine = require('../views/student.feedback.mine.html');
 var tplStudentFeedbackGive = require('../views/student.feedback.give.html');
 var tplStudentSettings = require('../views/student.settings.html');
@@ -60,6 +61,12 @@ angular.module('app')
 			url: '/settings',
 			templateUrl: tplStudentSettings,
 			controller: 'StudentSettingsController',
+			resolve: checkAuth(1)
+		})
+		.state('student.leaderboard', {
+			url: '/leaderboard',
+			templateUrl: tplStudentLeaderboard,
+			controller: 'StudentLeaderboardController',
 			resolve: checkAuth(1)
 		})
 		.state('admin', {
