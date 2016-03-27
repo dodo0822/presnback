@@ -6,7 +6,8 @@ var Schema = mongoose.Schema;
 
 var groupSchema = new Schema({
 	groupNum: Number,
-	needsFeedback: Boolean
+	needsFeedback: Boolean,
+	topic: String
 });
 
 var userSchema = new Schema({

@@ -77,6 +77,15 @@ angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $r
 			});
 		},
 
+		changeTopic: function(topic) {
+			return $http.post('/api/user/changeTopic', {
+				token: Session.token,
+				topic: topic
+			}).then(function(resp) {
+				return resp.data;
+			});
+		},
+
 		userProfile: function() {
 			return $http.get('/api/user/profile', { params: {
 				token: Session.token

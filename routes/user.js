@@ -294,6 +294,7 @@ module.exports = function(app) {
 			_id: req.user._id,
 			username: req.user.username,
 			email: req.user.email,
+			group: req.user.group,
 			groupNum: req.user.group.groupNum,
 			name: req.user.name,
 			fbid: req.user.fbid
@@ -327,6 +328,35 @@ module.exports = function(app) {
 				return;
 			}
 			user.remove(function(err) {
+				res.send({ status: 'ok' });
+			});
+		});
+	});
+
+	app.post('/user/changeTopic', auth.checkUser(), function(req, res) {
+		if(!req.body.topic) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		db.Group.findOne({ _id: req.user.group._id }, function(err, group) {
+			if(err) {
+				res.send({ status: 'error', message: 'internal server error' });
+				return;
+			}
+			if(!group) {
+				res.send({ status: 'error', message: 'internal server error' });
+				return;
+			}
+			if(!group.needsFeedback) {
+				res.send({ status: 'error', message: 'no need' });
+				return;
+			}
+			group.topic = req.body.topic;
+			group.save(function(err) {
+				if(err) {
+					res.send({ status: 'error', message: 'internal server error' });
+					return;
+				}
 				res.send({ status: 'ok' });
 			});
 		});

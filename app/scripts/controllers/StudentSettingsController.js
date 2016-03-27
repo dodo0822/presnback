@@ -21,6 +21,23 @@ angular.module('app').controller('StudentSettingsController', function($scope, U
 			}
 		});
 	};
+
+	$scope.changeTopic = function(topic) {
+		UserService.changeTopic(topic).then(function(resp) {
+			if(resp.status == 'error') {
+				$scope.topicMessage = resp.message;
+				return;
+			} else {
+				UserService.restore(Session.token, 1).then(function(resp) {
+					$scope.setCurrentUser(resp.user);
+				});
+				$scope.topicMessage = '主題變更成功。';
+				return;
+			}
+		});
+	};
+
+	$scope.topic = $scope.currentUser.group.topic;
 	$scope.Session = Session;
 	$scope.host = window.location.host;
 });

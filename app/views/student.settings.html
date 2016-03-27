@@ -27,6 +27,26 @@
 	<div class="col-md-4">
 		<div class="panel panel-default">
 			<div class="panel-heading">
+				<h3 class="panel-title">報告主題</h3>
+			</div>
+			<div class="panel-body">
+				<form ng-submit="changeTopic(topic)" ng-if="currentUser.group.needsFeedback">
+					<p><span class="text-warning"><em>修改口頭報告的主題。</em></span></p>
+					<div class="form-group">
+						<label for="new-topic">修改報告主題：</label>
+						<input type="text" class="form-control" id="new-topic" ng-model="topic" placeholder="Enter new topic">
+					</div>
+					<button type="submit" class="btn btn-primary">確定更改</button>&nbsp;&nbsp;<span class="text-danger">{{ topicMessage }}</span>
+				</form>
+				<div ng-if="!currentUser.group.needsFeedback">
+					<p><span class="text-warning"><em>沒有要上台報告，所以不須修改主題。</em></span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
 				<h3 class="panel-title">連接 Facebook 帳戶</h3>
 			</div>
 			<div class="panel-body">

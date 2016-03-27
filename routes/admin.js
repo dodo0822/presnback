@@ -41,7 +41,8 @@ module.exports = function(app) {
 				var row = table[i];
 				return function(callback) {
 					db.Group.update({ _id: row._id }, { $set: {
-						needsFeedback: row.needsFeedback
+						needsFeedback: row.needsFeedback,
+						topic: ''
 					}}, { multi: false }, function(err, upd) {
 						callback(err, upd);
 					});

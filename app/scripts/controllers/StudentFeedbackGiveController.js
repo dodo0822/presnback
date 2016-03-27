@@ -4,6 +4,7 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 	$scope.content = '';
 	$scope.score = -1;
 	$scope.message = '';
+	$scope.topic = '';
 
 	$scope.scoreDesc = SCORE_DESC;
 
@@ -11,6 +12,7 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 		$scope.to = idx;
 		$scope.message = '';
 		$scope.score = -1;
+		$scope.topic = $scope.groups[idx].topic;
 
 		FeedbackService.lookup($scope.groups[idx]._id).then(function(resp) {
 			if(resp.found) {
@@ -49,7 +51,6 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 					--i;
 				}
 			}
-			console.log(list);
 			$scope.groups = list;
 		});
 	});
