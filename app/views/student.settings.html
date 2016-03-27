@@ -6,6 +6,7 @@
 			</div>
 			<div class="panel-body">
 				<form ng-submit="changePassword(pwData)" ng-init="pwData = {}">
+					<p><span class="text-warning"><em>使用 Facebook 註冊的帳號，將無法變更密碼</em></span></p>
 					<div class="form-group">
 						<label for="current-password">現在的密碼：</label>
 						<input type="password" class="form-control" id="current-password" ng-model="pwData.current" placeholder="Enter current password">

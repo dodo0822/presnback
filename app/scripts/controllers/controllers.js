@@ -10,3 +10,4 @@ require('./StudentSettingsController');
 require('./HomeController');
 require('./LoginController');
 require('./RegisterController');
+require('./FbRegisterController');

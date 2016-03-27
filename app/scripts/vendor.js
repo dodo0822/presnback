@@ -5,4 +5,5 @@ module.exports = function() {
 	require('ngstorage');
 	require('bootstrap-loader');
 	require('angular-loading-bar');
+	require('angular-easyfb');
 };

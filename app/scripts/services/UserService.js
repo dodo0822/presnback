@@ -35,6 +35,17 @@ angular.module('app').service('UserService', function(AUTH_EVENTS, $http, $q, $r
 			});
 		},
 
+		fbRegister: function(accessToken, studentId, group) {
+			return $http.post('/api/user/fbRegister', {
+				access_token: accessToken,
+				studentId: studentId,
+				groupId: group
+			}).then(function(resp) {
+				return resp.data;
+			});
+		},
+
+
 		login: function(username, password, type) {
 			var promise;
 			if(type == 1) {

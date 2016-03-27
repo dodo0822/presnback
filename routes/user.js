@@ -10,6 +10,102 @@ var config = require('../config');
 var auth = require('../auth');
 
 module.exports = function(app) {
+	app.get('/user/oauth', function(req, res) {
+		request({
+			url: 'https://graph.facebook.com/v2.3/oauth/access_token',
+			qs: {
+				redirect_uri: config.siteUrl + '/api/user/oauth',
+				client_id: '1582033655448135',
+				client_secret: config.fbKey,
+				code: req.query.code
+			},
+			method: 'GET'
+		}, function(error, response, body) {
+			var body = JSON.parse(body);
+			request({
+				url: 'https://graph.facebook.com/me',
+				qs: {
+					access_token: body.access_token,
+					locale: 'zh_TW',
+					fields: 'name,email'
+				}
+			}, function(error, response, meBody) {
+				meBody = JSON.parse(meBody);
+				var id = meBody.id;
+				db.User.findOne({ fbid: id }, function(err, user) {
+					if(err) {
+						res.send({ status: 'error', message: 'internal server error' });
+						return;
+					}
+					if(user) {
+						var payload = {
+							_id: user._id,
+							expire: moment().add(1, 'd').format()
+						};
+						var token = jwt.encode(payload, db.jwtSecret);
+						res.redirect('/#/login?token=' + token);
+						return;
+					} else {
+						res.redirect('/#/fbRegister?access_token=' + body.access_token);
+						return;
+					}
+				});
+			});
+		});
+	});
+
+	app.post('/user/fbRegister', function(req, res) {
+		console.log(req.body);
+		if(!req.body.access_token || !req.body.groupId || !req.body.studentId) {
+			res.send({ status: 'error', message: 'Invalid data.' });
+			return;
+		}
+		request({
+			url: 'https://graph.facebook.com/me',
+			qs: {
+				access_token: req.body.access_token,
+				locale: 'zh_TW',
+				fields: 'name,email'
+			}
+		}, function(error, response, body) {
+			body = JSON.parse(body);
+			if(body.error !== undefined) {
+				res.send({ status: 'error', message: 'invalid access token' });
+				return;
+			}
+			db.User.findOne({ fbid: body.id }, function(err, exist) {
+				if(exist) {
+					res.send({ status: 'error', message: 'connected to fb already' });
+					return;
+				}
+				db.Group.findOne({ _id: req.body.groupId}, function(err, group) {
+					if(!group) {
+						res.send({ status: 'error', message: 'group not found' });
+						return;
+					}
+					var token = hat();
+					var user = new db.User({
+						password: 'z',
+						email: body.email,
+						name: body.name,
+						token: token,
+						verified: true,
+						studentId: req.body.studentId,
+						group: req.body.groupId,
+						fbid: body.id
+					});
+					user.save(function(err) {
+						if(err) {
+							res.send({ status: 'error', message: 'internal server error.'});
+							return;
+						}
+						res.send({ status: 'ok' });
+					});
+				});
+			});
+		});
+	});
+
 	app.get('/group/list', function(req, res) {
 		db.Group.find({}, function(err, list) {
 			if(err) {

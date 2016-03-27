@@ -8,8 +8,9 @@ var tplStudentFeedbackGive = require('../views/student.feedback.give.html');
 var tplStudentSettings = require('../views/student.settings.html');
 var tplLogin = require('../views/login.html');
 var tplRegister = require('../views/register.html');
+var tplFbRegister = require('../views/fbRegister.html');
 
-angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar' ]);
+angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar', 'ezfb' ]);
 
 require('./constants');
 require('./controllers/controllers');
@@ -17,6 +18,7 @@ require('./services/services');
 
 angular.module('app')
 .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
 	var checkAuth = function(type) {
 		return {
 			protected: [ 'UserService', '$q', function(UserService, $q) {
@@ -93,6 +95,11 @@ angular.module('app')
 			url: '/register',
 			templateUrl: tplRegister,
 			controller: 'RegisterController'
+		})
+		.state('fbRegister', {
+			url: '/fbRegister',
+			templateUrl: tplFbRegister,
+			controller: 'FbRegisterController'
 		});
 
 	$urlRouterProvider.otherwise(function($injector) {
@@ -102,8 +109,15 @@ angular.module('app')
 
 })
 
+.config(function(ezfbProvider) {
+	ezfbProvider.setLocale('zh_TW');
+	ezfbProvider.setInitParams({
+		appId: 1582033655448135
+	});
+})
 
-.run(function($rootScope, $state) {
+
+.run(function($rootScope, $state, $location) {
 	$rootScope.$on('$stateChangeError', function(e, to, toParams, from, fromParams, error) {
 		if(error.type === 'redirect') {
 			$state.go(error.location);

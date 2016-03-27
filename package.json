@@ -2,7 +2,7 @@
   "name": "presnback",
   "version": "1.0.0",
   "description": "Angular Webpack integration test.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --content-base app --hot",
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "angular": "^1.5.0",
+    "angular-easyfb": "https://github.com/dodo0822/angular-easyfb/archive/master.tar.gz",
     "angular-loading-bar": "^0.8.0",
     "angular-ui-router": "^0.2.18",
     "async": "^1.5.2",
@@ -39,6 +40,7 @@
     "body-parser": "^1.15.0",
     "bootstrap-sass": "^3.3.6",
     "express": "^4.13.4",
+    "file-loader": "^0.8.5",
     "hat": "0.0.3",
     "html-loader": "^0.4.3",
     "jquery": "^2.2.1",

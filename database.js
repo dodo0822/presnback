@@ -17,7 +17,8 @@ var userSchema = new Schema({
 	name: String,
 	token: String,
 	studentId: String,
-	verified: Boolean
+	verified: Boolean,
+	fbid: String
 });
 
 var adminSchema = new Schema({
