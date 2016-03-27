@@ -24,4 +24,20 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-md-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">連接 Facebook 帳戶</h3>
+			</div>
+			<div class="panel-body">
+				<div ng-if="!currentUser.fbid">
+					<p><span class="text-warning"><em>以後便可以用 Facebook 登入！</em></span></p>
+					<p><a class="btn btn-primary" ng-href="https://www.facebook.com/dialog/oauth?client_id=1582033655448135&scope=email&redirect_uri=http://{{ host }}/api/user/connect?token={{ Session.token }}">連接 Facebook</a></p>
+				</div>
+				<div ng-if="currentUser.fbid">
+					<p><span class="text-warning"><em>已經連接 Facebook 了！</em></span></p>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

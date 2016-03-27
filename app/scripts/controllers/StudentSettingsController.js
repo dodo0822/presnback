@@ -1,4 +1,4 @@
-angular.module('app').controller('StudentSettingsController', function($scope, UserService) {
+angular.module('app').controller('StudentSettingsController', function($scope, UserService, Session) {
 	$scope.passwordMessage = '';
 
 	$scope.changePassword = function(pwData) {
@@ -21,4 +21,6 @@ angular.module('app').controller('StudentSettingsController', function($scope, U
 			}
 		});
 	};
+	$scope.Session = Session;
+	$scope.host = window.location.host;
 });

@@ -54,6 +54,53 @@ module.exports = function(app) {
 		});
 	});
 
+	app.get('/user/connect', auth.checkUser(), function(req, res) {
+		request({
+			url: 'https://graph.facebook.com/v2.3/oauth/access_token',
+			qs: {
+				redirect_uri: config.siteUrl + '/api/user/connect?token=' + req.query.token,
+				client_id: '1582033655448135',
+				client_secret: config.fbKey,
+				code: req.query.code
+			},
+			method: 'GET'
+		}, function(error, response, body) {
+			var body = JSON.parse(body);
+			request({
+				url: 'https://graph.facebook.com/me',
+				qs: {
+					access_token: body.access_token,
+					locale: 'zh_TW',
+					fields: 'name,email'
+				}
+			}, function(error, response, meBody) {
+				meBody = JSON.parse(meBody);
+				var id = meBody.id;
+				if(id === undefined) {
+					res.send({ status: 'error', message: 'can\'t get fb info' });
+					return;
+				}
+				db.User.findOne({ fbid: id }, function(err, user) {
+					if(err) {
+						res.send({ status: 'error', message: 'internal server error' });
+						return;
+					}
+					if(user) {
+						res.send({ status: 'error', message: 'already connected to another account' });
+						return;
+					}
+					db.User.findOne({ _id: req.user._id }, function(err, user) {
+						user.name = meBody.name;
+						user['fbid'] = id;
+						user.save(function(err) {
+							res.redirect('/#/student/settings');
+						});
+					});
+				});
+			});
+		});
+	});
+
 	app.post('/user/fbRegister', function(req, res) {
 		console.log(req.body);
 		if(!req.body.access_token || !req.body.groupId || !req.body.studentId) {
@@ -248,7 +295,8 @@ module.exports = function(app) {
 			username: req.user.username,
 			email: req.user.email,
 			groupNum: req.user.group.groupNum,
-			name: req.user.name
+			name: req.user.name,
+			fbid: req.user.fbid
 		} });
 	});
 
