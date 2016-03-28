@@ -74,3 +74,7 @@ growl-notification.fading.ng-leave {
 growl-notification.fading.ng-leave.ng-leave-active {
 	opacity: 0;
 }
+
+.navbar-collapse.in {
+    overflow-y: visible;
+}

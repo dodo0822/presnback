@@ -3,6 +3,7 @@ angular.module('app').controller('AppController', function(UserService, ChatServ
 	$scope.isAuthenticated = UserService.isAuthenticated;
 	$scope.notificationIndex = 1;
 	$scope.notifications = {};
+	$scope.isCollapsed = true;
 
 	//$scope.chatMessages = [];
 

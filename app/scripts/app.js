@@ -12,7 +12,7 @@ var tplLogin = require('../views/login.html');
 var tplRegister = require('../views/register.html');
 var tplFbRegister = require('../views/fbRegister.html');
 
-angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar', 'ezfb', 'luegg.directives', 'growlNotifications', 'ngAnimate' ]);
+angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar', 'ezfb', 'luegg.directives', 'growlNotifications', 'ngAnimate', 'ui.bootstrap' ]);
 
 require('./constants');
 require('./controllers/controllers');

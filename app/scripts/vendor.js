@@ -9,4 +9,5 @@ module.exports = function() {
 	require('angularjs-scroll-glue');
 	require('angular-animate');
 	require('angular-growl-notifications');
+	require('angular-ui-bootstrap');
 };

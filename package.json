@@ -36,6 +36,7 @@
     "angular-easyfb": "https://github.com/dodo0822/angular-easyfb/archive/master.tar.gz",
     "angular-growl-notifications": "^2.2.0",
     "angular-loading-bar": "^0.8.0",
+    "angular-ui-bootstrap": "^1.2.5",
     "angular-ui-router": "^0.2.18",
     "angularjs-scroll-glue": "^2.0.4",
     "async": "^1.5.2",
