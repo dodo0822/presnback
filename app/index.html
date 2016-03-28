@@ -4,46 +4,55 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Presnback</title>
+		<style type="text/css">
+			.ng-cloak { display: none; }
+		</style>
 	</head>
 	<body ng-controller="AppController">
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">Presnback - Presentation Feedback<br><small>國立臺灣大學 普通物理學實驗口頭報告評分系統</small></a>
+		<div class="splash" ng-cloak>
+            <p>載入中，請稍候...</p>
+        </div>
+
+        <div class="ng-cloak">
+			<nav class="navbar navbar-default navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">Presnback - Presentation Feedback<br><small>國立臺灣大學 普通物理學實驗口頭報告評分系統</small></a>
+					</div>
+					<div id="navbar" class="navbar-collapse bs-js-navbar-collapse" uib-collapse="isCollapsed">
+						<ul class="nav navbar-nav">
+							<li><a ng-if="isAuthenticated(1)" ui-sref="home">首頁</a></li>
+							<li><a ng-if="!isAuthenticated()" ui-sref="login">登入</a></li>
+							<li><a ng-if="isAuthenticated()" ng-click="logout()" href="javascript:void(0)">登出</a></li>
+						</ul>
+					</div><!--/.nav-collapse -->
 				</div>
-				<div id="navbar" class="navbar-collapse bs-js-navbar-collapse" uib-collapse="isCollapsed">
-					<ul class="nav navbar-nav">
-						<li><a ng-if="isAuthenticated(1)" ui-sref="home">首頁</a></li>
-						<li><a ng-if="!isAuthenticated()" ui-sref="login">登入</a></li>
-						<li><a ng-if="isAuthenticated()" ng-click="logout()" href="javascript:void(0)">登出</a></li>
-					</ul>
-				</div><!--/.nav-collapse -->
+			</nav>
+
+			<growl-notifications></growl-notifications>
+
+			<div ng-repeat="(id, notification) in notifications track by id">
+				<growl-notification ttl="2000" class="fading" ng-class="['notification-normal','notification-important'][notification.important]">
+					{{ notification.message }}
+				</growl-notification>
 			</div>
-		</nav>
-
-		<growl-notifications></growl-notifications>
-
-		<div ng-repeat="(id, notification) in notifications track by id">
-			<growl-notification ttl="2000" class="fading" ng-class="['notification-normal','notification-important'][notification.important]">
-				{{ notification.message }}
-			</growl-notification>
-		</div>
 
 
-		<div class="container" ui-view>
+			<div class="container" ui-view>
 
-			
+				
 
-		</div><!-- /.container -->
-		<div class="container">
-			<hr>
-			<p>程式設計、維護：電機系 B04 方致偉、蘇峯廣、莫絲羽</p>
+			</div><!-- /.container -->
+			<div class="container">
+				<hr>
+				<p>程式設計、維護：電機系 B04 方致偉、蘇峯廣、莫絲羽</p>
+			</div>
 		</div>
 		<script src="bundle.js"></script>
 	</body>

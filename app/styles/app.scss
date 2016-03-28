@@ -111,3 +111,10 @@ growl-notification.fading.ng-leave.ng-leave-active {
 		float: left;
 	}
 }
+
+.splash {
+    display: none;
+    &[ng-cloak] {
+        display: block;
+    }
+}
