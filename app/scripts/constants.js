@@ -20,5 +20,7 @@ angular.module('app')
 .constant('SPECIAL_DESC', {
 	a: '肢體語言',
 	b: '簡報用心',
-	c: '超有梗'
+	c: '超有梗',
+	d: '給人印象深刻',
+	total: '總平均'
 });

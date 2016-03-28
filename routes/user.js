@@ -256,8 +256,10 @@ module.exports = function(app) {
 					_id: user._id,
 					username: user.username,
 					email: user.email,
+					group: user.group,
 					groupNum: user.group.groupNum,
-					name: user.name
+					name: user.name,
+					fbid: user.fbid
 				}, token: jwt.encode(payload, db.jwtSecret) });
 			});
 		});

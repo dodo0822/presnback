@@ -2,14 +2,14 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 	$scope.groups = [];
 	$scope.to = -1;
 	$scope.content = '';
-	$scope.score = -1;
+	$scope.scores = {
+		a: -1,
+		b: -1,
+		c: -1,
+		d: -1
+	};
 	$scope.message = '';
 	$scope.topic = '';
-	$scope.special = {
-		a: false,
-		b: false,
-		c: false
-	};
 
 	$scope.scoreDesc = SCORE_DESC;
 	$scope.specialDesc = SPECIAL_DESC;
@@ -17,42 +17,56 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 	$scope.select = function(idx) {
 		$scope.to = idx;
 		$scope.message = '';
-		$scope.score = -1;
-		$scope.topic = $scope.groups[idx].topic;
-		$scope.special = {
-			a: false,
-			b: false,
-			c: false
+		$scope.scores = {
+			a: -1,
+			b: -1,
+			c: -1,
+			d: -1
 		};
+		$scope.topic = $scope.groups[idx].topic;
 
 		FeedbackService.lookup($scope.groups[idx]._id).then(function(resp) {
 			if(resp.found) {
 				$scope.content = resp.feedback.content;
-				$scope.score = resp.feedback.score;
-				$scope.special = resp.feedback.special;
+				$scope.scores = resp.feedback.scores;
 			} else {
 				$scope.content = '';
-				$scope.scope = -1;
-				$scope.special = {
-					a: false,
-					b: false,
-					c: false
+				$scope.scores = {
+					a: -1,
+					b: -1,
+					c: -1,
+					d: -1
 				};
 			}
 		});
 	};
 
 	$scope.give = function() {
-		if(!$scope.content || $scope.to == -1 || !($scope.score <= 4 && $scope.score >= 1)) {
+		if(!$scope.content || $scope.to == -1) {
 			$scope.message = '請輸入資料！';
 			return;
 		}
-		if(($scope.score == 4 || $scope.score == 1) && $scope.content.length < 20) {
-			$scope.message = '請輸入至少 20 字的評分內容！';
+		if(!($scope.scores.a >= 1 && $scope.scores.a <= 4)) {
+			$scope.message = '資料不合法！';
 			return;
 		}
+		if(!($scope.scores.b >= 1 && $scope.scores.b <= 4)) {
+			$scope.message = '資料不合法！';
+			return;
+		}
+
+		if(!($scope.scores.c >= 1 && $scope.scores.c <= 4)) {
+			$scope.message = '資料不合法！';
+			return;
+		}
+
+		if(!($scope.scores.d >= 1 && $scope.scores.d <= 4)) {
+			$scope.message = '資料不合法！';
+			return;
+		}
+
 		var to = $scope.groups[$scope.to]._id;
-		FeedbackService.give(to, $scope.content, $scope.score, $scope.special).then(function(resp) {
+		FeedbackService.give(to, $scope.content, $scope.scores).then(function(resp) {
 			if(resp.status == 'ok') {
 				$scope.message = '評分成功送出！';
 			}

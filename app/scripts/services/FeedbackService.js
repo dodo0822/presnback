@@ -28,13 +28,12 @@ angular.module('app').service('FeedbackService', function($http, Session) {
 			});
 		},
 
-		give: function(to, content, score, special) {
+		give: function(to, content, scores) {
 			return $http.post('/api/feedback/give', {
 				token: Session.token,
 				to: to,
 				content: content,
-				score: score,
-				special: special
+				scores: scores
 			}).then(function(resp) {
 				return resp.data;
 			});

@@ -15,9 +15,23 @@
 				<p ng-if="to != -1"><strong>給第 {{ groups[to].groupNum }} 組的評分</strong></p>
 				<p><strong>報告主題：</strong><em ng-if="!topic">（沒有設定QQ）</em><span ng-if="topic">{{ topic }}</span></p>
 				<p><strong>評分分數：</strong></p>
-				<p><span ng-repeat="s in [ 4, 3, 2, 1 ]"><input ng-attr-id="{{ 'score-ratio-' + s }}" name="score" type="radio" ng-model="$parent.score" ng-value="s">&nbsp;&nbsp;<label ng-attr-for="{{ 'score-ratio-' + s }}" style="font-weight: normal;">{{ scoreDesc[s] }}</label><br></span></p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>評分項目</th>
+							<th ng-repeat="s in [ 4, 3, 2, 1 ]" width="21%">{{ scoreDesc[s] }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in ['a','b','c','d']">
+							<td>{{ specialDesc[item] }}</td>
+							<td ng-repeat="s in [4,3,2,1]"><input type="radio" ng-attr-name="{{ 'score-radio-' + item }}" ng-model="$parent.scores[item]" ng-value="s"></td>
+						</tr>
+					</tbody>
+				</table>
+				<!--<p><span ng-repeat="s in [ 4, 3, 2, 1 ]"><input ng-attr-id="{{ 'score-ratio-' + s }}" name="score" type="radio" ng-model="$parent.score" ng-value="s">&nbsp;&nbsp;<label ng-attr-for="{{ 'score-ratio-' + s }}" style="font-weight: normal;">{{ scoreDesc[s] }}</label><br></span></p>
 				<p><strong>特別投票：</strong></p>
-				<p><span ng-repeat="s in ['a', 'b', 'c']"><input ng-attr-id="{{ 'special-checkbox-' + s }}" type="checkbox" ng-model="$parent.special[s]">&nbsp;<label ng-attr-for="{{ 'special-checkbox-' + s }}" style="font-weight: normal;">{{ specialDesc[s] }}</label>&nbsp;&nbsp;</span></p> 
+				<p><span ng-repeat="s in ['a', 'b', 'c']"><input ng-attr-id="{{ 'special-checkbox-' + s }}" type="checkbox" ng-model="$parent.special[s]">&nbsp;<label ng-attr-for="{{ 'special-checkbox-' + s }}" style="font-weight: normal;">{{ specialDesc[s] }}</label>&nbsp;&nbsp;</span></p> -->
 				<label for="feedback-content">評分內容：（若已給過評分則自動帶入上次的內容）</label>
 				<textarea rows="10" id="feedback-content" class="form-control" ng-model="content"></textarea>
 			</div>

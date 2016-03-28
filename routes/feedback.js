@@ -9,33 +9,31 @@ module.exports = function(app) {
 			return;
 		}
 		var item = req.query.item;
-		if(!(item == 'a' || item == 'b' || item == 'c')) {
+		if(!(item == 'a' || item == 'b' || item == 'c' || item == 'd' || item == 'total')) {
 			res.send({ status: 'error', message: 'invalid request' });
 			return;
 		}
-		var obj = {};
+		var nums = {};
+		var as = {};
 		db.Feedback.find({}).exec(function(err, f) {
 			for(var i = 0; i < f.length; ++i) {
-				if(f[i].special[item]) {
-					if(!obj.hasOwnProperty(f[i].to)) {
-						obj[f[i].to] = 1;
-					} else {
-						obj[f[i].to]++;
-					}
+				var to = f[i].to;
+				if(!nums.hasOwnProperty(to)) {
+					nums[to] = 1;
+					as[to] = f[i].scores[item];
+				} else {
+					nums[to]++;
+					as[to] += f[i].scores[item];
 				}
 			}
-			
+
 			var leaderboard = [];
-			for(var k in obj) {
-				leaderboard.push({
-					id: k,
-					number: obj[k]
-				});
+
+			for(var id in nums) {
+				leaderboard.push({ id: id, score: as[id] });
 			}
 
-			leaderboard.sort(function(a, b) {
-				return b.number - a.number;
-			});
+			leaderboard.sort(function(a, b) { return b.score-a.score; });
 
 			if(leaderboard.length > 3) leaderboard.splice(2, leaderboard.length-3);
 
@@ -88,7 +86,7 @@ module.exports = function(app) {
 				ret.push({
 					time: f[i].time,
 					content: f[i].content,
-					score: f[i].score
+					scores: f[i].scores
 				});
 			}
 			res.send({ status: 'ok', feedback: ret });
@@ -110,26 +108,41 @@ module.exports = function(app) {
 	})
 
 	app.post('/feedback/give', auth.checkUser(), function(req, res) {
-		if(!req.body.to || !req.body.content || !req.body.score || !req.body.special) {
+		if(!req.body.to || !req.body.content || !req.body.scores) {
 			res.send({ status: 'error', message: 'invalid request' });
 			return;
 		}
-		if(!Number.isInteger(req.body.score)) {
+		if(!Number.isInteger(req.body.scores.a) || !Number.isInteger(req.body.scores.b) || !Number.isInteger(req.body.scores.c) || !Number.isInteger(req.body.scores.d)) {
 			res.send({ status: 'error', message: 'invalid request' });
 			return;
 		}
-		if((req.body.score == 1 || req.body.score == 4) && req.body.content.length < 20) {
+		if(req.body.scores.a > 4 || req.body.scores.a < 1) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		if(req.body.scores.b > 4 || req.body.scores.b < 1) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		if(req.body.scores.c > 4 || req.body.scores.c < 1) {
+			res.send({ status: 'error', message: 'invalid request' });
+			return;
+		}
+		if(req.body.scores.d > 4 || req.body.scores.d < 1) {
 			res.send({ status: 'error', message: 'invalid request' });
 			return;
 		}
 		var from = req.user._id;
 		var to = req.body.to;
 		var content = req.body.content;
-		var special = {
-			a: req.body.special.a || false,
-			b: req.body.special.b || false,
-			c: req.body.special.c || false
+		var scores = {
+			a: req.body.scores.a,
+			b: req.body.scores.b,
+			c: req.body.scores.c,
+			d: req.body.scores.d,
+			total: (req.body.scores.a + req.body.scores.b + req.body.scores.c + req.body.scores.d) / 4
 		};
+		
 		if(from == to) {
 			res.send({ status: 'error', message: 'you cannot give yourself a feedback' });
 			return;
@@ -144,9 +157,8 @@ module.exports = function(app) {
 				to: to
 			}, {
 				content: content,
-				score: req.body.score,
-				time: new Date(),
-				special: special
+				scores: scores,
+				time: new Date()
 			}, { upsert: true }, function(err, f) {
 				if(err) {
 					res.send({ status: 'error', message: 'internal server error' });
