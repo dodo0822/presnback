@@ -25,6 +25,9 @@ angular.module('app').service('ChatService', function($rootScope, CHAT_EVENTS) {
 			that.messages.push({ type: 0, message: msg.message, from: msg.from });
 			$rootScope.$broadcast(CHAT_EVENTS.newMessage, { type: 0, message: msg.message, from: msg.from });
 		});
+		this.socket.on('reconnect', function() {
+			that.socket.emit('nickname', nickname);
+		});
 	};
 
 	this.disconnect = function() {

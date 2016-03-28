@@ -24,6 +24,20 @@ module.exports = function(io) {
 		});
 		socket.on('message', function(msg) {
 			if(!msg) return;
+			if(msg == '/who') {
+				var sockets = io.sockets.clients().sockets;
+				var clients = [];
+				for(var k in sockets) {
+					clients.push(sockets[k].nickname);
+				}
+				var welcome = '聊天室裡面有：';
+				for(var i = 0; i < clients.length; ++i) {
+					welcome += clients[i];
+					if(i != clients.length-1) welcome += '、';
+				}
+				socket.emit('broadcast', welcome);
+				return;
+			}
 			io.emit('message', { from: socket.nickname, message: msg });
 		});
 		socket.on('disconnect', function() {
