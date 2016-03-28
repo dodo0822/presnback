@@ -7,11 +7,12 @@ var tplStudentLeaderboard = require('../views/student.leaderboard.html');
 var tplStudentFeedbackMine = require('../views/student.feedback.mine.html');
 var tplStudentFeedbackGive = require('../views/student.feedback.give.html');
 var tplStudentSettings = require('../views/student.settings.html');
+var tplStudentChat = require('../views/student.chat.html');
 var tplLogin = require('../views/login.html');
 var tplRegister = require('../views/register.html');
 var tplFbRegister = require('../views/fbRegister.html');
 
-angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar', 'ezfb' ]);
+angular.module('app', [ 'ui.router', 'ngStorage', 'angular-loading-bar', 'ezfb', 'luegg.directives', 'growlNotifications', 'ngAnimate' ]);
 
 require('./constants');
 require('./controllers/controllers');
@@ -67,6 +68,12 @@ angular.module('app')
 			url: '/leaderboard',
 			templateUrl: tplStudentLeaderboard,
 			controller: 'StudentLeaderboardController',
+			resolve: checkAuth(1)
+		})
+		.state('student.chat', {
+			url: '/chat',
+			templateUrl: tplStudentChat,
+			controller: 'StudentChatController',
 			resolve: checkAuth(1)
 		})
 		.state('admin', {

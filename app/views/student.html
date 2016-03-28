@@ -1,5 +1,6 @@
 <h1>Hello, {{ currentUser.name }}</h1>
 <ul class="nav nav-pills">
+	<li ng-class="isActive('/student/chat') ? 'active' : ''"><a ui-sref="student.chat">匿名聊天室</a></li>
 	<li ng-class="isActive('/student/feedback/mine') ? 'active' : ''"><a ui-sref="student.feedback.mine">我收到的評分</a></li>
 	<li ng-class="isActive('/student/feedback/give') ? 'active' : ''"><a ui-sref="student.feedback.give">評分其他組別</a></li>
 	<li ng-class="isActive('/student/leaderboard') ? 'active' : ''"><a ui-sref="student.leaderboard">熱門排行榜</a></li>

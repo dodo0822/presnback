@@ -26,6 +26,15 @@
 			</div>
 		</nav>
 
+		<growl-notifications></growl-notifications>
+
+		<div ng-repeat="(id, notification) in notifications track by id">
+			<growl-notification ttl="2000" class="fading" ng-class="['notification-normal','notification-important'][notification.important]">
+				{{ notification.message }}
+			</growl-notification>
+		</div>
+
+
 		<div class="container" ui-view>
 
 			

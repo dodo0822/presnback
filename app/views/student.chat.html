@@ -1,0 +1,25 @@
+<div ng-if="state == 0">
+	<h3>覺得聽報告太無聊嗎？</h3>
+	<form ng-submit="connect(nickname)">
+		<div class="form-group">
+			<label for="nickname">請輸入暱稱：</label>
+			<input type="text" class="form-control" id="nickname" ng-model="nickname" placeholder="Enter your nickname">
+		</div>
+		<button class="btn btn-danger" type="submit">連線！</button>
+	</form>
+</div>
+<div ng-if="state == 1" ng-init="tip = true">
+	<p ng-if="tip">現在可以去評別組的分數，聊天室會保持開啟。<a href="javascript:void(0)" ng-click="$parent.tip = false">我知道惹</a></p>
+	<div id="chat-area" scroll-glue>
+		<p ng-repeat="m in messages"><span ng-if="m.type == 0"><strong>{{ m.from }}</strong> 說：{{ m.message }}</span><span ng-if="m.type == 1" class="text-danger"><strong>主宰者：</strong>{{ m.message }}</span></p>
+	</div>
+	<p>&nbsp;</p>
+	<form ng-submit="emit()">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="What to say?" ng-model="$parent.message">
+			<span class="input-group-btn">
+				<button class="btn btn-danger" type="submit">說ㄅ！</button>
+			</span>
+		</div>
+	</form>
+</div>

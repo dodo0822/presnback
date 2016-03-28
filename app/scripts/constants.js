@@ -7,6 +7,10 @@ angular.module('app')
 	notAuthenticated: 'auth-not-authenticated',
 	notAuthorized: 'auth-not-authorized'
 })
+.constant('CHAT_EVENTS', {
+	newMessage: 'chat-new-message',
+	users: 'chat-users'
+})
 .constant('SCORE_DESC', [
 	'',
 	'我到底聽了三小...',

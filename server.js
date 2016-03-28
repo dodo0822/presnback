@@ -4,12 +4,14 @@ var url = require('url');
 var bodyParser = require('body-parser');
 var db = require('./database');
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 app.use(bodyParser.json());
 
 var api = express();
 
-require('./routes')(api);
+require('./routes')(api, io);
 
 switch(process.env.NODE_ENV) {
 	case 'production':
@@ -23,6 +25,6 @@ switch(process.env.NODE_ENV) {
 		break;
 }
 
-app.listen('8081', function() {
+http.listen('8081', function() {
 	console.log('started');
 });

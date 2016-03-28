@@ -310,7 +310,8 @@ module.exports = function(app) {
 					username: users[i].username,
 					groupNum: users[i].group.groupNum,
 					email: users[i].email,
-					name: users[i].name
+					name: users[i].name,
+					studentId: users[i].studentId
 				});
 			}
 			res.send({ status: 'ok', users: resp });

@@ -6,4 +6,7 @@ module.exports = function() {
 	require('bootstrap-loader');
 	require('angular-loading-bar');
 	require('angular-easyfb');
+	require('angularjs-scroll-glue');
+	require('angular-animate');
+	require('angular-growl-notifications');
 };
