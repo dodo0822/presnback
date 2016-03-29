@@ -30,7 +30,7 @@ module.exports = function(app) {
 			var leaderboard = [];
 
 			for(var id in nums) {
-				leaderboard.push({ id: id, score: as[id] });
+				leaderboard.push({ id: id, score: (as[id] / nums[id]) });
 			}
 
 			leaderboard.sort(function(a, b) { return b.score-a.score; });
