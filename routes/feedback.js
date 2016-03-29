@@ -35,7 +35,7 @@ module.exports = function(app) {
 
 			leaderboard.sort(function(a, b) { return b.score-a.score; });
 
-			if(leaderboard.length > 3) leaderboard.splice(2, leaderboard.length-3);
+			if(leaderboard.length > 3) leaderboard.splice(3, leaderboard.length-3);
 
 			var waterfall = [];
 
