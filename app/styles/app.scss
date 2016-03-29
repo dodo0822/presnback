@@ -2,6 +2,9 @@
 
 body {
 	padding-top: 70px;
+	&.bg {
+		background-image: url("../images/background.jpg");
+	}
 }
 
 .splash {
@@ -56,6 +59,13 @@ growl-notifications growl-notification {
 	background: rgba(90,0,0,0.6);
 }
 
+.notification-teacher {
+	height: 190px;
+	width: 379px;
+	background-image: url("../images/teacher.jpg");
+	background-size: 100% 100%;
+}
+
 growl-notification.fading.ng-move{
 	opacity: 0;
 	-webkit-transition: 0.5s linear all; /* Safari/Chrome */
@@ -74,6 +84,7 @@ growl-notification.fading.ng-leave {
 growl-notification.fading.ng-leave.ng-leave-active {
 	opacity: 0;
 }
+
 
 .navbar-collapse.in {
     overflow-y: visible;

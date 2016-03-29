@@ -8,7 +8,7 @@
 			.ng-cloak { display: none; }
 		</style>
 	</head>
-	<body ng-controller="AppController">
+	<body ng-class="isActive('/login') ? 'bg' : ''" ng-controller="AppController">
 		<div class="splash" ng-cloak>
             <p>載入中，請稍候...</p>
         </div>
@@ -38,7 +38,7 @@
 			<growl-notifications></growl-notifications>
 
 			<div ng-repeat="(id, notification) in notifications track by id">
-				<growl-notification ttl="2000" class="fading" ng-class="['notification-normal','notification-important'][notification.important]">
+				<growl-notification ttl="2000" class="fading" ng-class="['notification-normal','notification-important', 'notification-teacher'][notification.important]">
 					{{ notification.message }}
 				</growl-notification>
 			</div>

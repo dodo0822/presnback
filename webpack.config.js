@@ -44,11 +44,15 @@ module.exports = {
 		loaders: [
 			{
 				test: /\.scss$/,
-				loader: 'style!css!sass'
+				loader: 'style-loader!css-loader!sass'
 			},
 			{
 				test: /\.css$/,
-				loader: 'style!css'
+				loader: 'style-loader!css-loader'
+			},
+			{
+				test: /\.(png|jpg)$/,
+				loader: 'url-loader'
 			},
 			{
 				test: /\.js$/,

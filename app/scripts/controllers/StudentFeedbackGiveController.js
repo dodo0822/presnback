@@ -1,4 +1,4 @@
-angular.module('app').controller('StudentFeedbackGiveController', function($scope, Session, UserService, FeedbackService, SCORE_DESC, SPECIAL_DESC) {
+angular.module('app').controller('StudentFeedbackGiveController', function($rootScope, $scope, Session, UserService, FeedbackService, SCORE_DESC, SPECIAL_DESC, CHAT_EVENTS) {
 	$scope.groups = [];
 	$scope.to = -1;
 	$scope.content = '';
@@ -69,6 +69,7 @@ angular.module('app').controller('StudentFeedbackGiveController', function($scop
 		FeedbackService.give(to, $scope.content, $scope.scores).then(function(resp) {
 			if(resp.status == 'ok') {
 				$scope.message = '評分成功送出！';
+				$rootScope.$broadcast(CHAT_EVENTS.newMessage, { type: 2 });
 			}
 		});
 	};

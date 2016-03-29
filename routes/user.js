@@ -22,6 +22,11 @@ module.exports = function(app) {
 			method: 'GET'
 		}, function(error, response, body) {
 			var body = JSON.parse(body);
+			console.log(body);
+			if(body.hasOwnProperty('error')) {
+				res.send('Sorry, an internal server error occured.');
+				return;
+			}
 			request({
 				url: 'https://graph.facebook.com/me',
 				qs: {
@@ -31,6 +36,11 @@ module.exports = function(app) {
 				}
 			}, function(error, response, meBody) {
 				meBody = JSON.parse(meBody);
+				console.log(meBody);
+				if(meBody.hasOwnProperty('error')) {
+					res.send('An internal server error occured.');
+					return;
+				}
 				var id = meBody.id;
 				db.User.findOne({ fbid: id }, function(err, user) {
 					if(err) {

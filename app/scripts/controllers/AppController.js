@@ -10,7 +10,7 @@ angular.module('app').controller('AppController', function(UserService, ChatServ
 	$scope.addNotification = function(n) {
 		var i = $scope.notificationIndex++;
 		$scope.notifications[i] = n;
-		$scope.$apply();
+		if(!$scope.$$phase) $scope.$apply();
 	};
 	$scope.$on(CHAT_EVENTS.newMessage, function(evt, msg) {
 		//$scope.chatMessages.push(msg);
@@ -22,10 +22,15 @@ angular.module('app').controller('AppController', function(UserService, ChatServ
 				important: 0,
 				message: msg.from + ' 說：' + msg.message
 			});
-		} else {
+		} else if(msg.type == 1) {
 			$scope.addNotification({
 				important: 1,
 				message: '主宰者：' + msg.message
+			});
+		} else {
+			$scope.addNotification({
+				important: 2,
+				message: 'thanks!'
 			});
 		}
 	});
