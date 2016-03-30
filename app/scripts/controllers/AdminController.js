@@ -1,3 +1,3 @@
-angular.module('app').controller('AdminController', function($scope) {
-	$scope.test = 1+2;
+angular.module('app').controller('AdminController', function($scope, Session) {
+	$scope.token = Session.token;
 });
