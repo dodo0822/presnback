@@ -169,7 +169,26 @@ module.exports = function(app) {
 				res.send({ status: 'error', message: 'internal server error.'});
 				return;
 			}
-			res.send({ status: 'ok', groups: list });
+			var ids = {};
+			for(var i = 0; i < list.length; ++i) {
+				list[i] = list[i].toObject();
+				list[i]['users'] = [];
+				ids[list[i]._id] = i;
+			}
+			db.User.find({}, function(err, users) {
+				if(err) {
+					res.send({ status: 'error', message: 'internal server error.'});
+					return;
+				}
+				for(var i = 0; i < users.length; ++i) {
+					list[ids[users[i].group]].users.push({
+						_id: users[i]._id,
+						name: users[i].name,
+						fbid: users[i].fbid
+					});
+				}
+				res.send({ status: 'ok', groups: list });
+			});
 		});
 	});
 

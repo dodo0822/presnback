@@ -6,7 +6,7 @@
 					<h3 class="panel-title">你要給誰評分？</h3>
 				</div>
 				<ul class="list-group">
-					<li ng-class="to == $index ? 'list-group-item-info' : ''" class="list-group-item" ng-repeat="u in groups"><a href="javascript:void(0)" ng-click="select($index)">第 {{ u.groupNum }} 組</a></li>
+					<li ng-class="to == $index ? 'list-group-item-info' : ''" class="list-group-item" ng-repeat="u in groups"><a href="javascript:void(0)" ng-click="select($index)">第 {{ u.groupNum }} 組<br><em ng-if="!u.topic">（沒有設定QQ）</em><span ng-if="u.topic">{{ u.topic }}</span><br><span ng-repeat="user in u.users"><span ng-if="$index > 0">、</span>{{ user.name }}</span></a></li>
 				</ul>
 			</div>
 		</div>
